@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Entity // JPA 의 어노테이션, 데이터 테이블과 연결될 클래스임을 나타낸다.
 // 클래스의 카멜케이스 네이밍과 달리 테이블의 이름은 언더스코어(a_b) 네이밍으로 매칭한다.
 // 엔티티 클래스에서는 절대 Setter 메소드를 만들지 않는다.
-public class Posts {
+public class Posts extends BaseTimeEntity {
 
     @Id // 해당 테이블의 PK 필드를 나타냄
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 괄호 안은 PK의 생성 규칙을 나타낸다.
