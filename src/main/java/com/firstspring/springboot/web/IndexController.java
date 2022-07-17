@@ -1,8 +1,10 @@
 package com.firstspring.springboot.web;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+@RequiredArgsConstructor
 @Controller
 public class IndexController {
 
@@ -15,5 +17,10 @@ public class IndexController {
          * src/main/resources/templates/index.mustache 의 경로로 전환되어
            ViewResolver 라는 URL 요청 관리자가 알아서 처리한다.
          */
+    }
+
+    @GetMapping("/posts/save")
+    public String postsSave() {
+        return "posts-save"; // "/posts/save"를 호출하면 posts-save.mustache 를 호출하겠다는 메소드
     }
 }
