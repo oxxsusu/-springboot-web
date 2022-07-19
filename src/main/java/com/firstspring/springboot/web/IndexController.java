@@ -1,5 +1,6 @@
 package com.firstspring.springboot.web;
 
+import com.firstspring.springboot.config.auth.dto.SessionUser;
 import com.firstspring.springboot.service.posts.PostsService;
 import com.firstspring.springboot.web.dto.PostsResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -8,15 +9,26 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.servlet.http.HttpSession;
+
 @RequiredArgsConstructor
 @Controller
 public class IndexController {
 
     private final PostsService postsService;
+    private final HttpSession httpSession;
 
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("posts", postsService.findAllDesc());
+        /* 앞서 CustomOAuth2UserService 에서 로그인 성공 시 세션에 SessionUser 을 저장하도록 했음.
+        * 따라서 로그인 성공 시 httpSession.getAttribute("user") 에서 값을 가져올 수 있게 됨. */
+        SessionUser user = (SessionUser) httpSession.getAttribute("user");
+        if (user != null) {
+            model.addAttribute("userName", user.getName());
+            /* 세션에 저장된 값이 있을 때만 model에 userName 으로 등록하게 하고,
+            * 세션에 저장된 값이 없으면 model에 아무 값이 없는 상태이기 때문에 로그인 버튼이 보이게 한다. */
+        }
         return "index";
     }
 
