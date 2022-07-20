@@ -1,8 +1,10 @@
 package com.firstspring.springboot.web;
 
+import com.firstspring.springboot.config.auth.LoginUser;
 import com.firstspring.springboot.config.auth.dto.SessionUser;
 import com.firstspring.springboot.service.posts.PostsService;
 import com.firstspring.springboot.web.dto.PostsResponseDto;
+import com.mysql.cj.Session;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +21,11 @@ public class IndexController {
     private final HttpSession httpSession;
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, @LoginUser SessionUser user) {
+        /* @LoginUser 어노테이션을 사용하여 세션유저를 부르면 로그인된 사용자의 정보를 바로 가지고 올 수 있도록 어노테이션 기반으로 개선 */
         model.addAttribute("posts", postsService.findAllDesc());
         /* 앞서 CustomOAuth2UserService 에서 로그인 성공 시 세션에 SessionUser 을 저장하도록 했음.
         * 따라서 로그인 성공 시 httpSession.getAttribute("user") 에서 값을 가져올 수 있게 됨. */
-        SessionUser user = (SessionUser) httpSession.getAttribute("user");
         if (user != null) {
             model.addAttribute("userName", user.getName());
             /* 세션에 저장된 값이 있을 때만 model에 userName 으로 등록하게 하고,
